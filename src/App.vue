@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue'
 import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
 import StudentProfile from './components/StudentProfile.vue'
@@ -6,6 +7,7 @@ import StatsSection from './components/StatsSection.vue'
 import CourseInfo from './components/CourseInfo.vue'
 import AssignmentList from './components/AssignmentList.vue'
 import ActivityTimeline from './components/ActivityTimeline.vue'
+import ProductCard from './components/ProductCard.vue'
 // Create Student Data
 const student = {
   avatar: 'https://placehold.co/150',
@@ -69,6 +71,30 @@ const activities = [
     type: "quiz"
   }
 ]
+//create product data
+const products = [
+  {
+    name: 'Laptop',
+    price: 800,
+    inStock: true
+  },
+  {
+    name: 'Keyboard',
+    price: 50,
+    inStock: true
+  },
+  {
+    name: 'Mouse',
+    price: 25,
+    inStock: false
+  }
+]
+// create cart item state
+const cart = ref([])
+// add to cart function
+function handleAddToCart(productName) {
+  cart.value.push(productName)
+}
 
 </script>
 
@@ -80,8 +106,8 @@ const activities = [
   // add student profile
   <StudentProfile :avatar="student.avatar" :fullName="student.fullName" :email="student.email" :batch="student.batch"
     :track="student.track" />
-  //add stats section
-  <StatsSection :stats="stats" />
+  <!-- Student Profile -->
+  <StudentProfile />
 
   //add course info
   <CourseInfo :courseName="course.courseName" :instructor="course.instructor" :progress="course.progress" />
@@ -89,6 +115,31 @@ const activities = [
   <AssignmentList :assignments="assignments" />
   //add activity timeline
   <ActivityTimeline :activities="activities" />
+
+
+<!-- Product Practice Section -->
+
+<h2>Product Practice Section</h2>
+
+<ProductCard
+  v-for="product in products"
+  :key="product.name"
+  :name="product.name"
+  :price="product.price"
+  :inStock="product.inStock"
+  @addedToCart="handleAddToCart"
+/>
+
+<h3>Shopping Cart</h3>
+
+<ul>
+  <li
+    v-for="item in cart"
+    :key="item"
+  >
+    {{ item }}
+  </li>
+</ul>
 
   <Footer />
 </template>
